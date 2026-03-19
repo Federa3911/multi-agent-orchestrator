@@ -10,6 +10,7 @@ from collections import Counter
 
 from langchain_core.messages import AIMessage
 from langchain_core.prompts import ChatPromptTemplate
+
 from src.config import get_llm, settings
 from src.state import OrchestratorState
 
@@ -36,7 +37,7 @@ Current state:
 
 Rules:
 - Route to ONE agent at a time.
-- NEVER call the same agent more than {max_calls_per_agent} times. If an agent has reached its limit, skip it and move on.
+- NEVER call the same agent more than {max_calls_per_agent} times. If an agent has reached its limit, move on.
 - Once the writer has produced output, respond with FINISH. Do not call the writer again to rewrite.
 - If iteration is close to the limit, respond with FINISH immediately.
 - Prefer moving forward over perfecting previous steps.
@@ -58,9 +59,7 @@ async def supervisor_node(state: OrchestratorState) -> dict:
         return {
             "current_agent": "FINISH",
             "iteration": iteration + 1,
-            "messages": [
-                AIMessage(content="[Supervisor] Max iterations reached. Finalizing.")
-            ],
+            "messages": [AIMessage(content="[Supervisor] Max iterations reached. Finalizing.")],
         }
 
     # Hard stop: if writer already produced output, we're done
@@ -68,11 +67,7 @@ async def supervisor_node(state: OrchestratorState) -> dict:
         return {
             "current_agent": "FINISH",
             "iteration": iteration + 1,
-            "messages": [
-                AIMessage(
-                    content="[Supervisor] Writer has produced output. Finalizing."
-                )
-            ],
+            "messages": [AIMessage(content="[Supervisor] Writer has produced output. Finalizing.")],
         }
 
     # Enforce pipeline order: every agent must be called at least once
@@ -83,32 +78,19 @@ async def supervisor_node(state: OrchestratorState) -> dict:
             return {
                 "current_agent": agent,
                 "iteration": iteration + 1,
-                "messages": [
-                    AIMessage(
-                        content=f"[Supervisor] Routing to: {agent} (required pipeline step)"
-                    )
-                ],
+                "messages": [AIMessage(content=f"[Supervisor] Routing to: {agent} (required pipeline step)")],
             }
 
     # Format completed work for context
     completed_work = (
-        "\n".join(
-            f"- [{out['agent']}]: {out['output'][:200]}..."
-            for out in state.get("agent_outputs", [])
-        )
+        "\n".join(f"- [{out['agent']}]: {out['output'][:200]}..." for out in state.get("agent_outputs", []))
         or "None yet."
     )
 
-    plan_str = (
-        "\n".join(f"{i + 1}. {step}" for i, step in enumerate(state.get("plan", [])))
-        or "No plan yet."
-    )
+    plan_str = "\n".join(f"{i + 1}. {step}" for i, step in enumerate(state.get("plan", []))) or "No plan yet."
 
     agent_counts_str = (
-        ", ".join(
-            f"{agent}: {count}/{MAX_CALLS_PER_AGENT}"
-            for agent, count in agent_counts.items()
-        )
+        ", ".join(f"{agent}: {count}/{MAX_CALLS_PER_AGENT}" for agent, count in agent_counts.items())
         or "No agents called yet."
     )
 
@@ -142,17 +124,10 @@ async def supervisor_node(state: OrchestratorState) -> dict:
             break
 
     # Enforce: block agent if it already hit the call limit
-    if (
-        next_agent != "FINISH"
-        and agent_counts.get(next_agent, 0) >= MAX_CALLS_PER_AGENT
-    ):
+    if next_agent != "FINISH" and agent_counts.get(next_agent, 0) >= MAX_CALLS_PER_AGENT:
         # If the LLM tried to call an exhausted agent, auto-advance
         # If all agents are exhausted, finish
-        available = [
-            a
-            for a in ["researcher", "analyst", "writer"]
-            if agent_counts.get(a, 0) < MAX_CALLS_PER_AGENT
-        ]
+        available = [a for a in ["researcher", "analyst", "writer"] if agent_counts.get(a, 0) < MAX_CALLS_PER_AGENT]
         if available:
             next_agent = available[-1]  # pick the latest in the pipeline
         else:
@@ -161,9 +136,7 @@ async def supervisor_node(state: OrchestratorState) -> dict:
     return {
         "current_agent": next_agent,
         "iteration": iteration + 1,
-        "messages": [
-            AIMessage(content=f"[Supervisor] Routing to: {next_agent}\n{response_text}")
-        ],
+        "messages": [AIMessage(content=f"[Supervisor] Routing to: {next_agent}\n{response_text}")],
     }
 
 

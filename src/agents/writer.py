@@ -39,10 +39,7 @@ async def writer_node(state: OrchestratorState) -> dict:
     llm = get_llm(temperature=0.3)  # Slightly creative
 
     source_material = (
-        "\n\n".join(
-            f"=== {o['agent'].upper()} OUTPUT ===\n{o['output']}"
-            for o in state.get("agent_outputs", [])
-        )
+        "\n\n".join(f"=== {o['agent'].upper()} OUTPUT ===\n{o['output']}" for o in state.get("agent_outputs", []))
         or "No source material available."
     )
 

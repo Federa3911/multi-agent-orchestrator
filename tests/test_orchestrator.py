@@ -1,7 +1,8 @@
 """Integration tests for the orchestrator graph structure."""
 
 import pytest
-from src.orchestrator import build_graph, _route_from_supervisor
+
+from src.orchestrator import _route_from_supervisor, build_graph
 
 
 class TestGraphStructure:

@@ -10,15 +10,15 @@ Graph structure:
 
 from typing import Literal
 
-from langgraph.graph import StateGraph, START, END
-from langgraph.checkpoint.memory import MemorySaver
 from langchain_core.messages import AIMessage
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.graph import END, START, StateGraph
 
-from src.state import OrchestratorState
-from src.agents.supervisor import supervisor_node, plan_task
-from src.agents.researcher import researcher_node
 from src.agents.analyst import analyst_node
+from src.agents.researcher import researcher_node
+from src.agents.supervisor import plan_task, supervisor_node
 from src.agents.writer import writer_node
+from src.state import OrchestratorState
 
 
 def _route_from_supervisor(
@@ -48,10 +48,7 @@ async def assemble_output(state: OrchestratorState) -> dict:
         return {"final_output": state["final_output"]}
 
     # Fallback: compile from agent outputs
-    compiled = "\n\n".join(
-        f"## {o['agent'].title()}\n{o['output']}"
-        for o in state.get("agent_outputs", [])
-    )
+    compiled = "\n\n".join(f"## {o['agent'].title()}\n{o['output']}" for o in state.get("agent_outputs", []))
 
     return {
         "final_output": compiled or "No output was generated.",

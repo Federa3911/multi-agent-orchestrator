@@ -1,7 +1,9 @@
 """Unit tests for individual agents (mocked LLM)."""
 
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
-from unittest.mock import AsyncMock, patch, MagicMock
+
 from src.state import OrchestratorState
 
 
@@ -81,9 +83,7 @@ class TestSupervisor:
         from src.agents.supervisor import plan_task
 
         mock_response = MagicMock()
-        mock_response.content = (
-            "1. Research AI trends\n2. Analyze findings\n3. Write report"
-        )
+        mock_response.content = "1. Research AI trends\n2. Analyze findings\n3. Write report"
 
         with patch("src.agents.supervisor.get_llm") as mock_llm:
             mock_llm.return_value.ainvoke = AsyncMock(return_value=mock_response)
@@ -295,10 +295,7 @@ class TestAnalyst:
                 result = await analyst_node(state)
 
                 assert result["agent_outputs"][0]["agent"] == "analyst"
-                assert (
-                    result["agent_outputs"][0]["output"]
-                    == "Key insight: AI is growing."
-                )
+                assert result["agent_outputs"][0]["output"] == "Key insight: AI is growing."
 
     @pytest.mark.asyncio
     async def test_analyst_formats_previous_data(self):

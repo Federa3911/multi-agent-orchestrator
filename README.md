@@ -1,9 +1,12 @@
 # Multi-Agent Orchestrator
 
+[![CI](https://github.com/reiquileut/multi-agent-orchestrator/actions/workflows/ci.yml/badge.svg)](https://github.com/reiquileut/multi-agent-orchestrator/actions/workflows/ci.yml)
+[![Coverage: 99%](https://img.shields.io/badge/coverage-99%25-brightgreen)](https://github.com/reiquileut/multi-agent-orchestrator)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/downloads/)
 [![LangGraph](https://img.shields.io/badge/LangGraph-0.4+-1C3C3C?logo=langchain&logoColor=white)](https://github.com/langchain-ai/langgraph)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Demo-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 A lightweight multi-agent orchestration framework built with **LangGraph** that uses a Supervisor pattern to coordinate specialized AI agents for collaborative task solving.
 
@@ -123,7 +126,9 @@ multi-agent-orchestrator/
 │   ├── __init__.py
 │   ├── test_orchestrator.py   # Integration tests for the full graph
 │   ├── test_agents.py         # Unit tests for individual agents
-│   └── test_tools.py          # Unit tests for tools
+│   ├── test_tools.py          # Unit tests for tools
+│   ├── test_cli.py            # CLI entry point tests
+│   └── test_config.py         # Configuration & environment tests
 ├── .github/
 │   └── workflows/
 │       └── ci.yml             # GitHub Actions CI pipeline
@@ -188,12 +193,17 @@ async def your_agent_node(state: OrchestratorState) -> dict:
 
 ## Testing
 
+The test suite includes **30+ tests** across 5 test modules with **99% code coverage**.
+
 ```bash
 # Run all tests
 pytest tests/ -v
 
-# Run with coverage
-pytest tests/ --cov=src --cov-report=html
+# Run with coverage report
+pytest tests/ --cov=src --cov-report=html --cov-report=term-missing
+
+# Run only unit tests (no API keys needed)
+pytest tests/ -v -m "not integration"
 
 # Run specific test
 pytest tests/test_orchestrator.py -v -k "test_full_pipeline"

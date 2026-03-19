@@ -1,7 +1,8 @@
 """Unit tests for configuration and LLM initialization."""
 
-import pytest
 from unittest.mock import patch
+
+import pytest
 
 
 class TestGetLlm:

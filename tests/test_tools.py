@@ -1,14 +1,14 @@
 """Unit tests for orchestrator tools."""
 
 import sys
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 # Pre-register a mock tavily module so the inner `from tavily import TavilyClient` works
 _tavily_mock = MagicMock()
 sys.modules.setdefault("tavily", _tavily_mock)
 
 from src.tools.calculator import calculate  # noqa: E402
-from src.tools.text_processing import summarize_text, extract_key_points  # noqa: E402
+from src.tools.text_processing import extract_key_points, summarize_text  # noqa: E402
 
 
 class TestCalculator:
@@ -189,9 +189,7 @@ class TestExtractKeyPoints:
         assert result.startswith("•")
 
     def test_fallback_on_no_indicators(self):
-        text = (
-            "The cat sat on a mat. The dog ran in the park. Birds flew over the trees."
-        )
+        text = "The cat sat on a mat. The dog ran in the park. Birds flew over the trees."
         result = extract_key_points.invoke({"text": text})
         # Should return something (fallback)
         assert len(result) > 0

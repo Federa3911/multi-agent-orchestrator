@@ -1,6 +1,7 @@
 """Web search tools for the Researcher agent."""
 
 from langchain_core.tools import tool
+
 from src.config import settings
 
 
@@ -22,9 +23,7 @@ def web_search(query: str, max_results: int = 5) -> str:
 
     results = []
     for item in response.get("results", []):
-        results.append(
-            f"**{item['title']}**\nURL: {item['url']}\nContent: {item['content']}\n"
-        )
+        results.append(f"**{item['title']}**\nURL: {item['url']}\nContent: {item['content']}\n")
 
     return "\n---\n".join(results) if results else "No results found."
 

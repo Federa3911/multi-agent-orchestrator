@@ -30,5 +30,5 @@ docker:
 	docker compose up --build
 
 clean:
-	rm -rf __pycache__ .pytest_cache htmlcov .coverage
+	rm -rf __pycache__ .pytest_cache htmlcov .coverage coverage_report .ruff_cache
 	find . -type d -name __pycache__ -exec rm -rf {} +

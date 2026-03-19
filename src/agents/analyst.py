@@ -13,7 +13,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from src.config import get_llm
 from src.state import OrchestratorState
 from src.tools.calculator import calculate
-from src.tools.text_processing import summarize_text, extract_key_points
+from src.tools.text_processing import extract_key_points, summarize_text
 
 ANALYST_SYSTEM_PROMPT = """You are a Data Analyst Specialist. Your role is to process and \
 structure information into clear, actionable insights.
@@ -42,10 +42,7 @@ async def analyst_node(state: OrchestratorState) -> dict:
     llm = get_llm(temperature=0)
 
     previous_data = (
-        "\n\n".join(
-            f"=== From {o['agent']} ===\n{o['output']}"
-            for o in state.get("agent_outputs", [])
-        )
+        "\n\n".join(f"=== From {o['agent']} ===\n{o['output']}" for o in state.get("agent_outputs", []))
         or "No previous data available."
     )
 
@@ -68,15 +65,9 @@ async def analyst_node(state: OrchestratorState) -> dict:
         ),
     )
 
-    result = await react_agent.ainvoke(
-        {"messages": [("human", f"Analyze the data for: {state['task']}")]}
-    )
+    result = await react_agent.ainvoke({"messages": [("human", f"Analyze the data for: {state['task']}")]})
 
-    output = (
-        result["messages"][-1].content
-        if result["messages"]
-        else "No analysis produced."
-    )
+    output = result["messages"][-1].content if result["messages"] else "No analysis produced."
 
     return {
         "agent_outputs": [{"agent": "analyst", "output": output}],

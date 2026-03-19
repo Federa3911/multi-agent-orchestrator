@@ -1,7 +1,8 @@
 """Unit tests for the CLI entry point."""
 
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
-from unittest.mock import AsyncMock, patch, MagicMock
 
 
 class TestRunTask:
@@ -59,9 +60,7 @@ class TestMain:
     def test_main_with_positional_arg(self):
         """main() should call run_task with positional argument."""
         with patch("src.cli.argparse.ArgumentParser.parse_args") as mock_parse:
-            mock_parse.return_value = MagicMock(
-                task="hello", task_flag=None, verbose=False
-            )
+            mock_parse.return_value = MagicMock(task="hello", task_flag=None, verbose=False)
 
             with patch("src.cli.asyncio.run") as mock_run:
                 from src.cli import main
@@ -72,9 +71,7 @@ class TestMain:
     def test_main_with_flag_arg(self):
         """main() should work with --task flag."""
         with patch("src.cli.argparse.ArgumentParser.parse_args") as mock_parse:
-            mock_parse.return_value = MagicMock(
-                task=None, task_flag="foo", verbose=False
-            )
+            mock_parse.return_value = MagicMock(task=None, task_flag="foo", verbose=False)
 
             with patch("src.cli.asyncio.run") as mock_run:
                 from src.cli import main
@@ -85,13 +82,9 @@ class TestMain:
     def test_main_no_task_exits(self):
         """main() should error when no task is provided."""
         with patch("src.cli.argparse.ArgumentParser.parse_args") as mock_parse:
-            mock_parse.return_value = MagicMock(
-                task=None, task_flag=None, verbose=False
-            )
+            mock_parse.return_value = MagicMock(task=None, task_flag=None, verbose=False)
 
-            with patch(
-                "src.cli.argparse.ArgumentParser.error", side_effect=SystemExit(2)
-            ):
+            with patch("src.cli.argparse.ArgumentParser.error", side_effect=SystemExit(2)):
                 from src.cli import main
 
                 with pytest.raises(SystemExit):
@@ -107,10 +100,7 @@ class TestMain:
         has_main_block = any(
             isinstance(node, ast.If)
             and isinstance(node.test, ast.Compare)
-            and any(
-                isinstance(c, ast.Constant) and c.value == "__main__"
-                for c in node.test.comparators
-            )
+            and any(isinstance(c, ast.Constant) and c.value == "__main__" for c in node.test.comparators)
             for node in ast.walk(tree)
         )
         assert has_main_block

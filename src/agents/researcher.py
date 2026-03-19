@@ -12,7 +12,7 @@ from langgraph.prebuilt import create_react_agent
 
 from src.config import get_llm
 from src.state import OrchestratorState
-from src.tools.search import web_search, scrape_url
+from src.tools.search import scrape_url, web_search
 
 RESEARCHER_SYSTEM_PROMPT = """You are a Research Specialist. Your role is to gather accurate, \
 current information from the web.
@@ -40,13 +40,7 @@ async def researcher_node(state: OrchestratorState) -> dict:
     """
     llm = get_llm(temperature=0)
 
-    previous = (
-        "\n".join(
-            f"- [{o['agent']}]: {o['output'][:150]}"
-            for o in state.get("agent_outputs", [])
-        )
-        or "None."
-    )
+    previous = "\n".join(f"- [{o['agent']}]: {o['output'][:150]}" for o in state.get("agent_outputs", [])) or "None."
 
     plan_str = ", ".join(state.get("plan", []))
 
@@ -69,9 +63,7 @@ async def researcher_node(state: OrchestratorState) -> dict:
         ),
     )
 
-    result = await react_agent.ainvoke(
-        {"messages": [("human", f"Research this task: {state['task']}")]}
-    )
+    result = await react_agent.ainvoke({"messages": [("human", f"Research this task: {state['task']}")]})
 
     # Extract the final response
     output = result["messages"][-1].content if result["messages"] else "No findings."

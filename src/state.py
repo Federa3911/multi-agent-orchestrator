@@ -1,6 +1,7 @@
 """Shared state definition for the multi-agent orchestrator."""
 
 from typing import Annotated, TypedDict
+
 from langchain_core.messages import BaseMessage
 from langgraph.graph import add_messages
 
