@@ -26,15 +26,16 @@ A lightweight multi-agent orchestration framework built with **LangGraph** that 
 
 ```mermaid
 graph LR
-    A[User Task] --> B[Supervisor]
-    B -->|route| C[Researcher]
-    B -->|route| D[Analyst]
-    B -->|route| E[Writer]
-    C -->|result| F[(Shared State)]
-    D -->|result| F
-    E -->|result| F
-    F -->|evaluate| B
-    B -->|finish| G[Assemble Output]
+    A[User Task] --> B[Planner]
+    B --> C[Supervisor]
+    C -->|route| D[Researcher]
+    C -->|route| E[Analyst]
+    C -->|route| F[Writer]
+    D -->|result| G[(Shared State)]
+    E -->|result| G
+    F -->|result| G
+    G -->|evaluate| C
+    C -->|finish| H[Assemble Output]
 ```
 
 ### How It Works
@@ -51,7 +52,7 @@ graph LR
 |-------|------|-------|
 | **Supervisor** | Task decomposition, routing, quality control | Routing logic |
 | **Researcher** | Information gathering from web sources | Web Search (Tavily), URL scraping |
-| **Analyst** | Data processing, extraction, structured analysis | Python REPL, Calculator |
+| **Analyst** | Data processing, extraction, structured analysis | Calculator, Text summarization, Key point extraction |
 | **Writer** | Content synthesis, formatting, final output | Text generation |
 
 ---
@@ -148,10 +149,10 @@ multi-agent-orchestrator/
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `ANTHROPIC_API_KEY` | Yes* | Anthropic API key (default provider) |
-| `OPENAI_API_KEY` | Yes* | OpenAI API key (alternative provider) |
+| `OPENAI_API_KEY` | Yes* | OpenAI API key (default provider) |
+| `ANTHROPIC_API_KEY` | Yes* | Anthropic API key (alternative provider) |
 | `TAVILY_API_KEY` | Yes | Tavily API key for web search |
-| `LLM_PROVIDER` | No | `anthropic` (default) or `openai` |
+| `LLM_PROVIDER` | No | `openai` (default) or `anthropic` |
 | `LLM_MODEL` | No | Model name (default: `gpt-5.4-nano`) |
 | `LANGSMITH_API_KEY` | No | LangSmith tracing (recommended) |
 
@@ -172,7 +173,7 @@ from src.state import OrchestratorState
 async def your_agent_node(state: OrchestratorState) -> dict:
     """Your custom agent logic."""
     # Access shared state
-    task = state["current_task"]
+    task = state["task"]
 
     # Do work...
     result = "Your agent output"
@@ -211,13 +212,13 @@ Input: "Research the top 3 AI agent frameworks in 2025 and write a comparison"
 **Data Analysis**
 ```
 Input: "Analyze the key metrics from this quarterly report and summarize findings"
-  Analyst extracts metrics → Researcher validates data → Writer summarizes
+  Researcher gathers context → Analyst extracts & structures metrics → Writer summarizes
 ```
 
 **Content Creation**
 ```
 Input: "Write a technical blog post about LangGraph multi-agent patterns"
-  Researcher gathers sources → Writer drafts content → Analyst fact-checks
+  Researcher gathers sources → Analyst organizes key points → Writer drafts content
 ```
 
 ---

@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     openai_api_key: str = ""
     tavily_api_key: str = ""
-    max_agent_iterations: int = 10
+    max_agent_iterations: int = 6
     agent_timeout_seconds: int = 120
 
     model_config = {"env_file": ".env", "extra": "ignore"}

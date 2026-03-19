@@ -10,10 +10,10 @@ from collections import Counter
 
 from langchain_core.messages import AIMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate
-from src.config import get_llm
+from src.config import get_llm, settings
 from src.state import OrchestratorState
 
-MAX_ITERATIONS = 6
+MAX_ITERATIONS = settings.max_agent_iterations
 MAX_CALLS_PER_AGENT = 2
 
 SUPERVISOR_SYSTEM_PROMPT = """You are the Supervisor of a multi-agent team. Your job is to:
